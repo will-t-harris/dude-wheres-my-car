@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@types/geojson": "^7946.0.7",
     "@types/jest": "24.0.23",
     "@types/mapbox-gl": "^1.5.2",
     "@types/node": "12.12.11",

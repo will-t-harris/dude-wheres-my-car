@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import mapboxgl from "mapbox-gl";
+// import data from "./data.json";
 import "./App.scss";
+const data: mapboxgl.MapboxGeoJSONFeature = require("./data.json");
 
 const options = [
   {
@@ -41,7 +43,8 @@ const App: React.FC = () => {
   const [mapState, setMapState] = useState<any>({
     lng: 5,
     lat: 34,
-    zoom: 2
+    zoom: 2,
+    active: options[0]
   });
 
   useEffect(() => {
@@ -51,6 +54,32 @@ const App: React.FC = () => {
       center: [mapState.lng, mapState.lat],
       zoom: mapState.zoom
     });
+
+    const setFill = () => {
+      const { property, stops } = mapState.active;
+      map.setPaintProperty("countries", "fill-color", {
+        property,
+        stops
+      });
+    };
+
+    map.on("load", () => {
+      map.addSource("countries", {
+        type: "geojson",
+        data: data
+      });
+
+      map.addLayer(
+        {
+          id: "countries",
+          type: "fill",
+          source: "countries"
+        },
+        "country-label-lg"
+      );
+      setFill();
+    });
+
     map.on("move", () => {
       setMapState({
         lng: map.getCenter().lng.toFixed(4),
@@ -59,6 +88,7 @@ const App: React.FC = () => {
       });
     });
   }, []);
+
   return (
     <div className="App">
       <div className="sidebarStyle">
