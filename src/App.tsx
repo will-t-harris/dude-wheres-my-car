@@ -17,6 +17,10 @@ const App: React.FC = () => {
       zoom: mapState.zoom
     });
 
+    map.addControl(new MapboxDirections({
+      accessToken: mapboxgl.accessToken
+    }), 'top-left');
+
     map.on("move", () => {
       setMapState({
         lng: map.getCenter().lng.toFixed(4),
